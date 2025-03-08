@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
       with: {python-version: 3.13}
-    - run: pip install git+https://github.com/Kodiologist/hy.git@fecc8068a371140f66ec9f67e40cacb8d8e63a01
+    - run: pip install git+https://github.com/hylang/hy.git@93fbd2030a16d8d8d56f86bd5be48a32a727b302
     - run: pip install hyrule --no-deps
     - run: pip install pytest
     - run: pytest
