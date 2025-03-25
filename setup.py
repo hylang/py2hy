@@ -12,7 +12,7 @@ setuptools.setup(
         'Source Code': 'https://github.com/hylang/py2hy'},
     install_requires = [
         'hy >= 1.1.0',
-        'hyrule'],
+        'hyrule >= 1'],
     packages = setuptools.find_packages(),
     package_data = dict(py2hy = [
         str(p.relative_to('py2hy'))
