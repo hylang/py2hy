@@ -1,6 +1,7 @@
 (import
   ast
-  itertools [dropwhile])
+  itertools [dropwhile]
+  hyrule [pformat])
 
 (eval-and-compile (setv
   cat hy.I.itertools.chain.from-iterable
@@ -339,9 +340,8 @@
 
 (defn ast-to-text [x]
   "Call `ast-to-models` and then return Hy source text from the models."
-  (import hyrule [pformat])
   (+
     (.join "\n" (gfor
       model (ast-to-models x)
-      (.removeprefix (hy.I.hyrule.pformat model) "'")))
+      (.removeprefix (pformat model) "'")))
     "\n"))
