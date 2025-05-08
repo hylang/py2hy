@@ -169,7 +169,7 @@
         `#{~@(T x.elts)}
       [ListComp SetComp DictComp GeneratorExp]
          `(
-            ~(S (+ (.lower (get (. (type x) __name__) 0)) "for"))
+            ~(S (+ (.lower (. (type x) __name__ [0])) "for"))
             ~@(cat (T x.generators))
             ~@(if (isinstance x ast.DictComp)
               [(T x.key) (T x.value)]

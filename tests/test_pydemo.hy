@@ -1,4 +1,4 @@
-"Here we reuse a lot of tests from Hy itself via `pydemo.py`."
+"Here we reuse a lot of tests from Hy itself via `pydemo.hy`."
 
 
 (import
@@ -6,6 +6,7 @@
   subprocess
   py2hy
   hyrule [import-path])
+(setv  T True  F False)
 
 
 (defn test-pydemo [cache tmp-path]
@@ -29,15 +30,15 @@
     (.write-text (/ d "pydemo.py") (.
       (subprocess.run
         ["hy2py" (str (/ d "pydemo.hy"))]
-        :text True :check True :capture-output True)
+        :text T :check T :capture-output T)
       stdout)))
 
   ; Translate `pydemo.py` back to Hy.
   (setv p (/ tmp-path "output.hy"))
-  (p.write-text (py2hy.ast-to-text
+  (.write-text p (py2hy.ast-to-text
     (ast.parse (.read-text (/ d "pydemo.py")) "pydemo")))
 
   ; Call `assert-stuff` on the result.
   (.assert-stuff (import-path (/ d "test_hy2py.py"))
     :m (import-path p)
-    :can-test-async True))
+    :can-test-async T))
