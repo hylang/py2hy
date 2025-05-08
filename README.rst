@@ -8,7 +8,7 @@ py2hy is currently unreleased, since it depends on bugfixes in Hy 1.1.0, which i
 Usage
 ============================================================
 
-To use the command-line interface, see ``python3 -m py2hy --help``. The programmtic interface comprises two functions, of which see the docstrings:
+To use the command-line interface, see ``python3 -m py2hy --help``. The programmatic interface comprises two functions, of which see the docstrings:
 
 - ``py2hy.ast_to_models``
 - ``py2hy.ast_to_text``
