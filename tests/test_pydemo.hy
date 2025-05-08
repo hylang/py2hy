@@ -18,7 +18,7 @@
     ; Get the files we need from Hy's Git repository.
     (import urllib.request [urlretrieve])
     (setv url-root "https://raw.githubusercontent.com/hylang/hy/")
-    (setv commit "93fbd2030a16d8d8d56f86bd5be48a32a727b302")
+    (setv commit "14ba4eb39f37d7ef91289e57b596c41c0827e95b")
     (urlretrieve
       f"{url-root}/{commit}/tests/resources/pydemo.hy"
       (/ d "pydemo.hy"))
@@ -40,5 +40,4 @@
 
   ; Call `assert-stuff` on the result.
   (.assert-stuff (import-path (/ d "test_hy2py.py"))
-    :m (import-path p)
-    :can-test-async T))
+    :m (import-path p)))
