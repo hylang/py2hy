@@ -3,8 +3,6 @@ py2hy
 
 py2hy is a library and command-line interface to translate Python code to `Hy <http://hylang.org>`__ code. As with Hy's built-in ``hy2py``, all style information is discarded, including most comments. The result is messy, in part since there is no Hy autoformatter (yet?), but it works, and it makes a good starting point for a hand translation. You can also use py2hy when still learning Hy, to help figure out how to do something in Hy given an example in Python.
 
-py2hy is currently unreleased, since it depends on bugfixes in Hy 1.1.0, which is also unreleased.
-
 Usage
 ============================================================
 
