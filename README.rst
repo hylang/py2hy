@@ -1,7 +1,7 @@
 py2hy
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-py2hy is a library and command-line interface to translate Python code to `Hy <http://hylang.org>`__ code. As with Hy's built-in ``hy2py``, all style information is discarded, including most comments. The result is messy, in part since there is no Hy autoformatter (yet?), but it works, and it makes a good starting point for a hand translation. You can also use py2hy when still learning Hy, to help figure out how to do something in Hy given an example in Python.
+py2hy is a library and command-line interface to translate Python code to `Hy <http://hylang.org>`__ code. As with Hy's built-in ``hy2py``, all style information is discarded, including most comments. The result can be messy, but it works, and it makes a good starting point for a hand translation. You can also use py2hy when still learning Hy, to help figure out how to do something in Hy given an example in Python.
 
 Usage
 ============================================================
@@ -12,6 +12,10 @@ To use the command-line interface, see ``python3 -m py2hy --help``. The programm
 - ``py2hy.ast_to_text``
 
 The test suite uses pytest.
+
+To autoformat the output, try the third-party library `beautifhy <https://github.com/atisharma/beautifhy>`__::
+
+    $ python3 -m py2hy mycode.py | beautifhy -
 
 Unimplemented nodes
 ============================================================
