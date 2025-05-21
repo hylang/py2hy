@@ -126,12 +126,12 @@
         `(assert ~(T x.test) ~@(when x.msg [(T x.msg)]))
       Import
         `(import ~@(cat (T x.names)))
-      ImportFrom
+      ImportFrom (do
         `(import
-          ~(hy.read (+ (* "." x.level) x.module))
+          ~(hy.read (+ (* "." x.level) (or x.module "")))
           ~(if (and (= (len x.names) 1) (= (. x names [0] name) "*"))
             '*
-            `[~@(cat (T x.names))]))
+            `[~@(cat (T x.names))])))
       Global
         `(global ~@(map S x.names))
       Nonlocal
@@ -286,10 +286,13 @@
            [`(unpack-mapping ~(T x.value))]
            [(K x.arg) (T x.value)])
 
-      alias
+      alias (do
+        (setv name (if (in "." x.name)
+          `(. ~@(map S (.split x.name ".")))
+          (S x.name)))
         (if x.asname
-          #((S x.name) :as (S x.asname))
-          #((S x.name)))
+          #(name :as (S x.asname))
+          #(name)))
 
       withitem
         [
