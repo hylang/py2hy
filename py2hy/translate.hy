@@ -242,7 +242,7 @@
         `#(~@(T x.elts))
 
       Slice
-        `(hy.I.builtins.slice ~(T x.lower) ~(T x.upper) ~(T x.step))
+        `(hy.I.builtins.slice ~(Tn x.lower) ~(Tn x.upper) ~(Tn x.step))
 
       comprehension
         `[
@@ -343,6 +343,9 @@
 
 (setv T ast-to-models)
   ; "T" is for "translate".
+
+(defn Tn [x]
+  (if (is x None) 'None (T x)))
 
 (defn digest-arg [xd]
   (setv [x default] xd)

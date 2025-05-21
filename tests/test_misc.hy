@@ -38,7 +38,15 @@
   (check "x[1:10:2]" '(cut x 1 10 2))
   (check "x[1::2]"   '(cut x 1 None 2))
   (check "x[:10:2]"  '(cut x None 10 2))
-  (check "x[::-2]"   '(cut x None None -2)))
+  (check "x[::-2]"   '(cut x None None -2))
+
+  ; Slices in tuple indices can't expressed with `cut`. In real code,
+  ; one would use e.g. `hyrule.ncut`.
+  (assert (=
+    (2hy "x[1:3:, ::-2]")
+    '(get x #(
+      (hy.I.builtins.slice 1 3 None)
+      (hy.I.builtins.slice None None -2))))))
 
 
 (defn test-translation-errors []
