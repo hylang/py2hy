@@ -50,8 +50,10 @@
           [~@(T x.bases)]
           ~@(T x.body))
 
-      Return
-        `(return ~@(when x.value [(T x.value)]))
+      [Return Yield]
+        `(
+          ~(S (.lower (. (type x) __name__)))
+          ~@(when x.value [(T x.value)]))
       Delete
         `(del ~@(T x.targets))
       Assign
@@ -180,8 +182,6 @@
               [(T x.elt)]))
       Await
         `(await ~(T x.value))
-      Yield
-        `(yield ~(T x.value))
       YieldFrom
         `(yield :from ~(T x.value))
       Compare

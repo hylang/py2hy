@@ -12,11 +12,13 @@ result."
   (get (py2hy.ast-to-models (ast.parse python-text)) 0))
 
 
-(defn test-return []
+(defn test-return-yield []
   ; https://github.com/hylang/py2hy/issues/3
-  (assert (= (2hy "return 1")    '(return 1)))
-  (assert (= (2hy "return None") '(return None)))
-  (assert (= (2hy "return")      '(return))))
+  ; https://github.com/hylang/py2hy/issues/5
+  (for [op '[return yield]]
+    (assert (= (2hy f"{op} 1")    `(~op 1)))
+    (assert (= (2hy f"{op} None") `(~op None)))
+    (assert (= (2hy op)           `(~op)))))
 
 
 (defn test-chained-assignment []
