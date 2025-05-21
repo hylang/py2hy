@@ -206,7 +206,9 @@
           (hy.models.FString (T x.values)))
 
       Constant
-        (hy.as-model x.value)
+        (if (= x.value ...)
+          '...
+          (hy.as-model x.value))
       Attribute
         `(. ~(T x.value) ~(S x.attr))
       Subscript

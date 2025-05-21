@@ -12,6 +12,11 @@ result."
   (get (py2hy.ast-to-models (ast.parse python-text)) 0))
 
 
+(defn test-ellipsis []
+  ; https://github.com/hylang/py2hy/issues/6
+  (assert (= (2hy "...") '...)))
+
+
 (defn test-return-yield []
   ; https://github.com/hylang/py2hy/issues/3
   ; https://github.com/hylang/py2hy/issues/5
