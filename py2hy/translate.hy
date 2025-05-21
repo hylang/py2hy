@@ -5,8 +5,15 @@
 
 (eval-and-compile (setv
   cat hy.I.itertools.chain.from-iterable
-  S hy.models.Symbol
   K hy.models.Keyword))
+
+(eval-and-compile (defn S [x]
+  (cond
+    ; Use Unicode mincing for Python identifiers not expressible as Hy
+    ; symbols.
+    (= x "Inf") '𝐈𝐧𝐟
+    (= x "NaN") '𝐍𝐚𝐍
+    True        (hy.models.Symbol x))))
 
 (defn ast-to-models [x]
   "Given a Python `ast` object `x`, return a `list` of Hy model

@@ -12,6 +12,11 @@ result."
   (get (py2hy.ast-to-models (ast.parse python-text)) 0))
 
 
+(defn test-inf-and-nan []
+  (assert (= (2hy "Inf") '𝐈𝐧𝐟))
+  (assert (= (2hy "NaN") '𝐍𝐚𝐍)))
+
+
 (defn test-ellipsis []
   ; https://github.com/hylang/py2hy/issues/6
   (assert (= (2hy "...") '...)))
