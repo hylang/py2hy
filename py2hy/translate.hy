@@ -170,7 +170,13 @@
       IfExp
         `(if ~(T x.test) ~(T x.body) ~(T x.orelse))
       Dict
-        `{~@(cat (zip (T x.keys) (T x.values)))}
+        `{~@(cat (gfor
+          [k v] (zip x.keys x.values)
+          (if (is k None)
+            ; `v` is a mapping to unpack.
+            [`(unpack-mapping ~(T v))]
+            ; Otherwise, we have a normal key-value pair.
+            [(T k) (T v)])))}
       Set
         `#{~@(T x.elts)}
       [ListComp SetComp DictComp GeneratorExp]

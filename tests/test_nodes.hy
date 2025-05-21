@@ -17,6 +17,10 @@ result."
   (assert (= (2hy "...") '...)))
 
 
+(defn test-unpacking-in-literal-dict []
+  (assert (= (2hy "{1: 2, **{3: 4}}") '{1 2 #** {3 4}})))
+
+
 (defn test-return-yield []
   ; https://github.com/hylang/py2hy/issues/3
   ; https://github.com/hylang/py2hy/issues/5
