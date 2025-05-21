@@ -51,7 +51,7 @@
           ~@(T x.body))
 
       Return
-        `(return ~(T x.value))
+        `(return ~@(when x.value [(T x.value)]))
       Delete
         `(del ~@(T x.targets))
       Assign

@@ -41,6 +41,13 @@
   (check "x[::-2]"   '(cut x None None -2)))
 
 
+(defn test-return []
+  ; https://github.com/hylang/py2hy/issues/3
+  (assert (= (2hy "return 1")    '(return 1)))
+  (assert (= (2hy "return None") '(return None)))
+  (assert (= (2hy "return")      '(return))))
+
+
 (defn test-chained-assignment []
   ; https://github.com/hylang/py2hy/issues/2
 
