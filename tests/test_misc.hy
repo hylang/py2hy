@@ -41,6 +41,20 @@
   (check "x[::-2]"   '(cut x None None -2)))
 
 
+(defn test-chained-assignment []
+  ; https://github.com/hylang/py2hy/issues/2
+
+  (setv d {})
+  (hy.eval :globals d `(do
+    (setv x [0 0 0 0 0])
+    (setv accum [])
+    (defn f [i]
+      (.append accum i) i)
+    ~(2hy "x[f(1)] = x[f(2)] = f(3)")))
+  (assert (= (:x d) [0 3 3 0 0]))
+  (assert (= (:accum d) [3 1 2])))
+
+
 (defn test-translation-errors []
 
   (defclass C [ast.AST])

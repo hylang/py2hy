@@ -55,11 +55,15 @@
       Delete
         `(del ~@(T x.targets))
       Assign
-        `(setv
-          ~(if (= (len x.targets) 1)
-            (T (get x.targets 0))
-            (hy.models.List (T x.targets)))
-          ~(T x.value))
+        (if (= (len x.targets) 1)
+          `(setv
+            ~(T (get x.targets 0))
+            ~(T x.value))
+          ; Represent a chained assignment like `a = b = c = d`
+          ; as                                  `(setv [a b c] (* [d] 3))`
+          `(setv
+            ~(hy.models.List (T x.targets))
+            (* [~(T x.value)] ~(hy.models.Integer (len x.targets)))))
       AugAssign
         `(
           ~(S (+ (T x.op) '=))
