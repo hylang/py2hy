@@ -14,10 +14,26 @@
     (= x "NaN") '𝐍𝐚𝐍
     True        (hy.models.Symbol x))))
 
+
 (defn ast-to-models [x]
   "Given a Python `ast` object `x`, return a `list` of Hy model
   objects (or possibly just one model, if the input wasn't one of the
   usual top-level `ast` classes)."
+
+  (setv T ast-to-models)
+    ; "T" is for "translate".
+
+  (defn Tn [x]
+    (if (is x None) 'None (T x)))
+
+  (defn digest-arg [xd]
+    (setv [x default] xd)
+    (setv a (S x.arg))
+    (when default
+      (setv a `[~a ~(T default)]))
+    (if (or x.annotation x.type-comment)
+      `(annotate ~a ~(T (or x.annotation x.type-comment)))
+      a))
 
   (when (isinstance x list)
     (return (lfor
@@ -347,20 +363,6 @@
       True
         (raise (TypeError f"Not an `ast` node: {x}")))))
 
-(setv T ast-to-models)
-  ; "T" is for "translate".
-
-(defn Tn [x]
-  (if (is x None) 'None (T x)))
-
-(defn digest-arg [xd]
-  (setv [x default] xd)
-  (setv a (S x.arg))
-  (when default
-    (setv a `[~a ~(T default)]))
-  (if (or x.annotation x.type-comment)
-    `(annotate ~a ~(T (or x.annotation x.type-comment)))
-    a))
 
 (defn ast-to-text [x]
   "Call `ast-to-models` and then return Hy source text from the models."
