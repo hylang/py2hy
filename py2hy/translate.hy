@@ -4,8 +4,7 @@
   hyrule [pformat])
 
 (eval-and-compile (setv
-  cat hy.I.itertools.chain.from-iterable
-  K hy.models.Keyword))
+  cat hy.I.itertools.chain.from-iterable))
 
 (eval-and-compile (defn S [x]
   (cond
@@ -299,7 +298,7 @@
       keyword
         (if (is x.arg None)
            [`(unpack-mapping ~(T x.value))]
-           [(K x.arg) (T x.value)])
+           [(hy.models.Keyword x.arg) (T x.value)])
 
       alias (do
         (setv name (if (in "." x.name)
