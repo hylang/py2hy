@@ -252,7 +252,7 @@
                   (fn [x] (= x 'None))
                   (gfor
                     i [x.slice.step x.slice.upper x.slice.lower]
-                    (if (is i None) 'None (T i))))))))
+                    (Tn i)))))))
           `(get ~(T x.value) ~(T x.slice)))
       Starred
         `(unpack-iterable ~(T x.value))
