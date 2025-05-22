@@ -55,6 +55,13 @@
   (with [e (pytest.raises NotImplementedError)]
     (py2hy.ast-to-models (C)))
   (assert (. e value args [0] (startswith "Unimplemented `ast` node type:")))
+  (setv out (py2hy.ast-to-models (C) :allow-unimplemented True))
+  (assert (and
+    (isinstance out hy.models.Tuple)
+    (= (len out) 2)
+    (= (get out 0) 'NotImplemented)
+    (isinstance (get out 1) hy.models.String)
+    (in "C" (get out 1))))
 
   (with [e (pytest.raises TypeError)]
     (py2hy.ast-to-models 5))

@@ -15,16 +15,23 @@
     True        (hy.models.Symbol x))))
 
 
-(defn ast-to-models [x]
+(defn ast-to-models [x [allow-unimplemented False]]
   "Given a Python `ast` object `x`, return a `list` of Hy model
   objects (or possibly just one model, if the input wasn't one of the
-  usual top-level `ast` classes)."
+  usual top-level `ast` classes).
 
-  (setv T ast-to-models)
+  By default, unimplemented AST nodes raise `NotImplementedError`. If
+  `allow-unimplemented` is true, these nodes are replaced with a
+  `hy.models.Tuple` where the first element is the symbol
+  `NotImplemented`, and the second is the node type name as a
+  `hy.models.String`."
+
+  (defmacro T [arg]
     ; "T" is for "translate".
+    `(ast-to-models ~arg allow-unimplemented))
 
-  (defn Tn [x]
-    (if (is x None) 'None (T x)))
+  (defn Tn [arg]
+    (if (is arg None) 'None (T arg)))
 
   (defn digest-arg [xd]
     (setv [x default] xd)
@@ -358,16 +365,18 @@
           ~v]))
 
       (isinstance x ast.AST)
-        (raise (NotImplementedError f"Unimplemented `ast` node type: {(type x)}"))
+        (if allow-unimplemented
+          `#(NotImplemented ~(hy.models.String (str (type x))))
+          (raise (NotImplementedError f"Unimplemented `ast` node type: {(type x)}")))
 
       True
         (raise (TypeError f"Not an `ast` node: {x}")))))
 
 
-(defn ast-to-text [x]
+(defn ast-to-text [x [allow-unimplemented False]]
   "Call `ast-to-models` and then return Hy source text from the models."
   (+
     (.join "\n" (gfor
-      model (ast-to-models x)
+      model (ast-to-models x allow-unimplemented)
       (.removeprefix (pformat model) "'")))
     "\n"))
