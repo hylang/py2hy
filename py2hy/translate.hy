@@ -21,7 +21,7 @@
   usual top-level `ast` classes).
 
   By default, unimplemented AST nodes raise `NotImplementedError`. If
-  `allow-unimplemented` is true, these nodes are replaced with a
+  `allow_unimplemented` is true, these nodes are replaced with a
   `hy.models.Tuple` where the first element is the symbol
   `NotImplemented`, and the second is the node type name as a
   `hy.models.String`."
@@ -79,7 +79,7 @@
           [~@(T x.bases)]
           ~@(T x.body))
 
-      [Return Yield]
+      [Return Yield Await]
         `(
           ~(S (.lower (. (type x) __name__)))
           ~@(when x.value [(T x.value)]))
@@ -157,12 +157,12 @@
         `(assert ~(T x.test) ~@(when x.msg [(T x.msg)]))
       Import
         `(import ~@(cat (T x.names)))
-      ImportFrom (do
+      ImportFrom
         `(import
           ~(hy.read (+ (* "." x.level) (or x.module "")))
           ~(if (and (= (len x.names) 1) (= (. x names [0] name) "*"))
             '*
-            `[~@(cat (T x.names))])))
+            `[~@(cat (T x.names))]))
       Global
         `(global ~@(map S x.names))
       Nonlocal
@@ -171,8 +171,8 @@
         (T x.value)
 
       Pass
-        ; Usually we try to skip `Pass` nodes, so this should only come
-        ; up if e.g. the user gives an unadorned `Pass` node to
+        ; We try to skip `Pass` nodes, so this should only come up if
+        ; e.g. the user gives an unadorned `Pass` node to
         ; `ast-to-models`.
         'None
       Break
@@ -215,8 +215,6 @@
             ~@(if (isinstance x ast.DictComp)
               [(T x.key) (T x.value)]
               [(T x.elt)]))
-      Await
-        `(await ~(T x.value))
       YieldFrom
         `(yield :from ~(T x.value))
       Compare
@@ -236,7 +234,9 @@
           #((T x.value) #* (if x.format-spec [(T x.format-spec)] []))
           :conversion (when (!= x.conversion -1) (chr x.conversion)))
       JoinedStr
-        (if (and (= (len x.values) 1) (isinstance (get x.values 0) ast.Constant))
+        (if (and
+            (= (len x.values) 1)
+            (isinstance (get x.values 0) ast.Constant))
           (T (get x.values 0))
           (hy.models.FString (T x.values)))
 
@@ -257,9 +257,7 @@
               True
                 (reversed (list (dropwhile
                   (fn [x] (= x 'None))
-                  (gfor
-                    i [x.slice.step x.slice.upper x.slice.lower]
-                    (Tn i)))))))
+                  (map Tn [x.slice.step x.slice.upper x.slice.lower]))))))
           `(get ~(T x.value) ~(T x.slice)))
       Starred
         `(unpack-iterable ~(T x.value))
@@ -323,13 +321,14 @@
            [`(unpack-mapping ~(T x.value))]
            [(hy.models.Keyword x.arg) (T x.value)])
 
-      alias (do
-        (setv name (if (in "." x.name)
-          `(. ~@(map S (.split x.name ".")))
-          (S x.name)))
-        (if x.asname
-          #(name :as (S x.asname))
-          #(name)))
+      alias
+        (do
+          (setv name (if (in "." x.name)
+            `(. ~@(map S (.split x.name ".")))
+            (S x.name)))
+          (if x.asname
+            #(name :as (S x.asname))
+            #(name)))
 
       withitem
         [
@@ -374,7 +373,7 @@
 
 
 (defn ast-to-text [x [allow-unimplemented False]]
-  "Call `ast-to-models` and then return Hy source text from the models."
+  "Call `ast_to_models` and then return Hy source text from the models."
   (+
     (.join "\n" (gfor
       model (ast-to-models x allow-unimplemented)
