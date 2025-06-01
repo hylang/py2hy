@@ -1,7 +1,8 @@
 (import
   ast
   itertools [dropwhile]
-  hyrule [pformat])
+  hyrule [pformat]
+  packaging.version [Version])
 
 (eval-and-compile (setv
   cat hy.I.itertools.chain.from-iterable))
@@ -86,15 +87,21 @@
       Delete
         `(del ~@(T x.targets))
       Assign
-        (if (= (len x.targets) 1)
-          `(setv
-            ~(T (get x.targets 0))
-            ~(T x.value))
-          ; Represent a chained assignment like `a = b = c = d`
-          ; as                                  `(setv [a b c] (* [d] 3))`
-          `(setv
-            ~(hy.models.List (T x.targets))
-            (* [~(T x.value)] ~(hy.models.Integer (len x.targets)))))
+        `(setv ~@(cond
+          (= (len x.targets) 1) [
+            ; This is a non-chained assignment.
+            (T (get x.targets 0))
+            (T x.value)]
+          (>= (Version hy.last-version) (Version "1.2")) [
+            ; We have a sufficiently new Hy for chained assignment.
+            :chain
+            (hy.models.List (T x.targets))
+            (T x.value)]
+          True [
+            ; Represent a chained assignment like   `a = b = c = d`
+            ; as                                    `(setv [a b c] (* [d] 3))`
+            (hy.models.List (T x.targets))
+            `(* [~(T x.value)] ~(hy.models.Integer (len x.targets)))]))
       AugAssign
         `(
           ~(S (+ (T x.op) '=))
