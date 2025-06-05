@@ -27,6 +27,14 @@ The following features of Python's ``ast`` are not yet implemented, and are unli
 - ``TryStar``
 - Pattern-matching: ``Match``, ``MatchValue``, ``MatchSingleton``, ``MatchSequence``, ``MatchMapping``, ``MatchClass``, ``MatchStar``, ``MatchAs``, ``MatchOr``
 
+Version history
+============================================================
+
+Here are the most important user-visible changes in each release.
+
+- 0.2.0 (2025-06-05): ``ast_to_models`` and ``ast_to_text`` got a new parameter ``allow_unimplemented``. An anthill's worth of bugs have been exterminated.
+- 0.1.0 (2025-05-08): First release.
+
 License
 ============================================================
 
