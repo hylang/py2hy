@@ -49,6 +49,29 @@ result."
   (assert (= (:accum d) [3 1 2])))
 
 
+(defn test-default-arguments []
+  ; https://github.com/hylang/py2hy/issues/9
+
+  (assert (=
+    (2hy "lambda x = 1: 1")
+    '(fn [[x 1]] 1)))
+  (assert (=
+    (2hy "lambda x = None: 1")
+    '(fn [[x None]] 1)))
+  (assert (=
+    (2hy "lambda x = (): 1")
+    '(fn [[x #()]] 1)))
+  (assert (=
+    (2hy "lambda a = 1, b = 2, c = 3: 1")
+    '(fn [[a 1] [b 2] [c 3]] 1)))
+  (assert (=
+    (2hy "lambda a, b = 2, c = 3: 1")
+    '(fn [a [b 2] [c 3]] 1)))
+  (assert (=
+    (2hy "lambda a, b, c = 3: 1")
+    '(fn [a b [c 3]] 1))))
+
+
 (defn test-dotted-import []
 
   ; https://github.com/hylang/py2hy/issues/4

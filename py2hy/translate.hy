@@ -301,7 +301,7 @@
           (setv posonlyargs (lfor  a x.posonlyargs  [a None]))
           (setv args (lfor  a x.args  [a None]))
           (for [[a v] (zip
-              (cut (+ posonlyargs args) (len x.defaults) None)
+              (cut (+ posonlyargs args) (- (len x.defaults)) None)
               x.defaults)]
             (setv (get a 1) v))
           ; Likewise `kwonlyargs`.
