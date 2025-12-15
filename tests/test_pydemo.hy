@@ -18,7 +18,7 @@
     ; Get the files we need from Hy's Git repository.
     (import urllib.request [urlretrieve])
     (setv url-root "https://raw.githubusercontent.com/hylang/hy/")
-    (setv commit "14ba4eb39f37d7ef91289e57b596c41c0827e95b")
+    (setv commit "8a32e579f254d9690789e4bc3f3e86a6ff7c4eb6")
     (urlretrieve
       f"{url-root}/{commit}/tests/resources/pydemo.hy"
       (/ d "pydemo.hy"))

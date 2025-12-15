@@ -72,6 +72,16 @@ result."
     '(fn [a b [c 3]] 1))))
 
 
+(defn test-class-decorators []
+  ; https://github.com/hylang/py2hy/issues/8
+  (assert (=
+    (2hy "@d\nclass C: pass")
+    '(defclass [d] C [])))
+  (assert (=
+    (2hy "@d1\n@d2(1, 2, *x, y = 3, **z)\n@d3\nclass C: pass")
+    '(defclass [d1 (d2 1 2 #* x :y 3 #** z) d3] C []))))
+
+
 (defn test-dotted-import []
 
   ; https://github.com/hylang/py2hy/issues/4

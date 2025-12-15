@@ -73,7 +73,7 @@
       ClassDef
         `(defclass
           ~@(when x.decorator-list
-            `[~@(T x.decorator-list)])
+            `[[~@(T x.decorator-list)]])
           ~@(when x.type-params
             [:tp (T x.type-params)])
           ~(S x.name)
