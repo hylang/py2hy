@@ -13,7 +13,7 @@
 
   (setv d (cache.mkdir "hy2py_pydemo"))
 
-  (when (= (len (list (d.iterdir))) 0)
+  (when (not (.exists (/ d "pydemo.py")))
 
     ; Get the files we need from Hy's Git repository.
     (import urllib.request [urlretrieve])
@@ -26,7 +26,7 @@
       f"{url-root}/{commit}/tests/test_hy2py.py"
       (/ d "test_hy2py.py"))
 
-    ; Call `hy2py` on `pydemo.hy` to get a Python version.
+    ; Call `hy2py` on `pydemo.hy` to get a Python version, `pydemo.py`.
     (.write-text (/ d "pydemo.py") (.
       (subprocess.run
         ["hy2py" (str (/ d "pydemo.hy"))]
