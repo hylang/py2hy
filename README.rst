@@ -32,6 +32,7 @@ Version history
 
 Here are the most important user-visible changes in each release.
 
+- 0.2.1 (2026-01-14): Fixed some bugs with default arguments and class decorators.
 - 0.2.0 (2025-06-05): ``ast_to_models`` and ``ast_to_text`` got a new parameter ``allow_unimplemented``. An anthill's worth of bugs have been exterminated.
 - 0.1.0 (2025-05-08): First release.
 
