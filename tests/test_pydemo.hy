@@ -18,12 +18,12 @@
     ; Get the files we need from Hy's Git repository.
     (import urllib.request [urlretrieve])
     (setv url-root "https://raw.githubusercontent.com/hylang/hy/")
-    (setv commit "a938f8d1ea135b410929b79a126b7d1395dffb48")
+    (setv git-ref "1.3.0")
     (urlretrieve
-      f"{url-root}/{commit}/tests/resources/pydemo.hy"
+      f"{url-root}/{git-ref}/tests/resources/pydemo.hy"
       (/ d "pydemo.hy"))
     (urlretrieve
-      f"{url-root}/{commit}/tests/test_hy2py.py"
+      f"{url-root}/{git-ref}/tests/test_hy2py.py"
       (/ d "test_hy2py.py"))
 
     ; Call `hy2py` on `pydemo.hy` to get a Python version, `pydemo.py`.
