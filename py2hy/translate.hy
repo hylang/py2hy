@@ -223,7 +223,9 @@
             ~(S (+ (.lower (. (type x) __name__ [0])) "for"))
             ~@(cat (T x.generators))
             ~@(if (isinstance x ast.DictComp)
-              [(T x.key) (T x.value)]
+              (if x.value
+                [(T x.key) (T x.value)]
+                `[#** ~(T x.key)])
               [(T x.elt)]))
       YieldFrom
         `(yield :from ~(T x.value))

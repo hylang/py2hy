@@ -28,6 +28,12 @@ result."
   (assert (= (2hy "{1: 2, **{3: 4}}") '{1 2 #** {3 4}})))
 
 
+(defn [(pytest.mark.skipif (< sys.version-info #(3 15)) :reason "Comprehension unpacking (in Python) require Python 3.15")]
+test-unpacking-in-comprehension []
+  (assert (= (2hy "[*l for l in ls]") '(lfor  l ls  #* l)))
+  (assert (= (2hy "{**d for d in ds}") '(dfor  d ds  #** d))))
+
+
 (defn test-return-yield []
   ; https://github.com/hylang/py2hy/issues/3
   ; https://github.com/hylang/py2hy/issues/5
