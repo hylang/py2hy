@@ -91,3 +91,18 @@ result."
 
   ; https://github.com/hylang/py2hy/issues/7
   (assert (= (2hy "from . import foo") '(import . [foo]))))
+
+
+(defn [(pytest.mark.skipif (< sys.version-info #(3 14)) :reason "Template strings require Python 3.14")]
+test-tstrings []
+  (setv x (2hy "t'aaa{1 + 1 !r :5}bbb'"))
+  (assert (isinstance x hy.models.FString))
+  (assert x.is-tstring)
+  (setv [a middle b] x)
+  (assert (= a '"aaa"))
+  (assert (= b '"bbb"))
+  (assert (isinstance middle hy.models.FComponent))
+  (assert middle.is-tstring)
+  (assert (= (list middle) ['(+ 1 1) '"5"]))
+  (assert (= middle.expression '"1 + 1"))
+  (assert (= middle.conversion "r")))

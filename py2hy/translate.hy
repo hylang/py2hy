@@ -236,16 +236,22 @@
       Call
         `(~(T x.func) ~@(T x.args) ~@(cat (T x.keywords)))
 
-      FormattedValue
+      [FormattedValue Interpolation]
         (hy.models.FComponent
           #((T x.value) #* (if x.format-spec [(T x.format-spec)] []))
-          :conversion (when (!= x.conversion -1) (chr x.conversion)))
-      JoinedStr
+          :conversion (when (!= x.conversion -1) (chr x.conversion))
+          #** (if (isinstance x ast.FormattedValue)
+            {}
+            {"expression" (hy.models.String x.str)  "is_tstring" True}))
+      [JoinedStr TemplateStr]
         (if (and
+            (isinstance x ast.JoinedStr)
             (= (len x.values) 1)
             (isinstance (get x.values 0) ast.Constant))
           (T (get x.values 0))
-          (hy.models.FString (T x.values)))
+          (hy.models.FString (T x.values) #** (if (isinstance x ast.JoinedStr)
+            {}
+            {"is_tstring" True})))
 
       Constant
         (if (= x.value ...)
@@ -367,6 +373,9 @@
         `[
           (isinstance x ~(hy.models.Tuple (gfor
             sym (if (isinstance k hy.models.List) k [k])
+            :if (not (and
+              (< hy.I.sys.version-info #(3 14))
+              (in sym ['TemplateStr 'Interpolation])))
             `(. ast ~sym))))
           ~v]))
 
