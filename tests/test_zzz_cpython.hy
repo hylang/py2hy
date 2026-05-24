@@ -4,17 +4,21 @@ alphabetically last)."
 
 
 (import
-  shutil)
+  re
+  shutil
+  pytest)
 
 
-(defn test-cpython [cache]
+(defn [(pytest.mark.filterwarnings "ignore::SyntaxWarning")]
+test-cpython [cache]
 
-  (setv pyv (.removesuffix (hy.I.platform.python-version) ".0"))
+  (setv pyv (hy.I.platform.python-version))
+  (setv pyv-nums-only (get (re.match r"(\d+\.\d+\.\d+)" pyv) 1))
   (setv d (cache.mkdir f"test_cpython_{pyv}"))
   (when (= (len (list (d.iterdir))) 0)
     ; Download and extract CPython's tests.
     (hy.I.urllib/request.urlretrieve
-      f"https://www.python.org/ftp/python/{pyv}/Python-{pyv}.tgz"
+      f"https://www.python.org/ftp/python/{pyv-nums-only}/Python-{pyv}.tgz"
       (/ d f"Python-{pyv}.tgz"))
     (shutil.unpack-archive :filter "data"
       (/ d f"Python-{pyv}.tgz")
@@ -25,7 +29,7 @@ alphabetically last)."
 
   (setv test-paths (lfor
     [dirpath _ filenames] (.walk (/ d "t"))
-    :if (not (= dirpath.stem "encoded_modules"))
+    :if (not (in dirpath.stem ["encoded_modules" "badsyntax"]))
     fname filenames
     :if (.endswith fname ".py")
     :if (not (.startswith fname "bad"))
