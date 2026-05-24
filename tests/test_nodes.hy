@@ -4,8 +4,10 @@ result."
 
 
 (import
+  sys
   ast
-  py2hy)
+  py2hy
+  pytest)
 
 
 (defn 2hy [python-text]
@@ -106,3 +108,9 @@ test-tstrings []
   (assert (= (list middle) ['(+ 1 1) '"5"]))
   (assert (= middle.expression '"1 + 1"))
   (assert (= middle.conversion "r")))
+
+
+(defn [(pytest.mark.skipif (< sys.version-info #(3 15)) :reason "Lazy imports require Python 3.15")]
+test-lazy-import []
+  (assert (= (2hy "lazy import plugh, blarg") '(import :lazy plugh blarg)))
+  (assert (= (2hy "lazy from mmm import a, b") '(import :lazy mmm [a b]))))

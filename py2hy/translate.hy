@@ -163,9 +163,12 @@
       Assert
         `(assert ~(T x.test) ~@(when x.msg [(T x.msg)]))
       Import
-        `(import ~@(cat (T x.names)))
+        `(import
+          ~@(when (getattr x "is_lazy" None) [:lazy])
+          ~@(cat (T x.names)))
       ImportFrom
         `(import
+          ~@(when (getattr x "is_lazy" None) [:lazy])
           ~(hy.read (+ (* "." x.level) (or x.module "")))
           ~(if (and (= (len x.names) 1) (= (. x names [0] name) "*"))
             '*
